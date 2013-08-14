@@ -26,39 +26,10 @@ var Half = (function() {
 
   var self = this;
 
-  this.doRequest = function(uri, meth, data, onSuccess, onError) {
-
-    var async = true
-
-    var os = function(json) {
-      onSuccess(adorn(json));
-    };
-    var oe = function(jqxhr, status, err) {
-      if ( ! onError) return;
-      var d = null;
-      try { d = JSON.parse(jqxhr.responseText); } catch(ex) {}
-      onError(d, jqxhr, status, err);
-    };
-
-    $.ajax({ type: meth, url: uri, async: async, success: os, error: oe });
-  };
-
-  this.go = function(endpoint, onSuccess, onError) {
-    Half.doRequest(endpoint, 'GET', onSuccess, onError);
-  };
-
-  var doGet = function(rel, params, onSuccess, onError) {
-    if (params === undefined) {
-      onError = onSuccess; onSuccess = params; params = {};
-    }
-  };
-  var doPost = function(rel, params, data, onSuccess, onError) {
-    if (params === undefined) {
-      onError = onSuccess; onSuccess = params; params = {};
-    }
-  };
   var link = function(rel) {
+
     var l = this._links[rel];
+
     if (rel.match(/^#/)) {
       for (var r in this._links) {
         if (r.indexOf(rel, r.length - rel.length) < 0) continue;
@@ -69,12 +40,45 @@ var Half = (function() {
     if (l) return l;
     throw new Error("no rel '" + rel + "'")
   };
-  var adorn = function(doc) {
-    doc.doGet = doGet;
-    doc.doPost = doGet;
+
+  this.wrap = function(doc) {
+
     doc.link = link;
+
     return doc;
   };
+
+//  this.doRequest = function(uri, meth, data, onSuccess, onError) {
+//
+//    var async = true
+//
+//    var os = function(json) {
+//      onSuccess(adorn(json));
+//    };
+//    var oe = function(jqxhr, status, err) {
+//      if ( ! onError) return;
+//      var d = null;
+//      try { d = JSON.parse(jqxhr.responseText); } catch(ex) {}
+//      onError(d, jqxhr, status, err);
+//    };
+//
+//    $.ajax({ type: meth, url: uri, async: async, success: os, error: oe });
+//  };
+//
+//  this.go = function(endpoint, onSuccess, onError) {
+//    Half.doRequest(endpoint, 'GET', onSuccess, onError);
+//  };
+//
+//  var doGet = function(rel, params, onSuccess, onError) {
+//    if (params === undefined) {
+//      onError = onSuccess; onSuccess = params; params = {};
+//    }
+//  };
+//  var doPost = function(rel, params, data, onSuccess, onError) {
+//    if (params === undefined) {
+//      onError = onSuccess; onSuccess = params; params = {};
+//    }
+//  };
 
   return this;
 
