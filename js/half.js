@@ -27,8 +27,6 @@ var Half = (function() {
 
   var self = this;
 
-  this._mockedHttps = null;
-
   var link = function(rel, params) {
 
     if (this._links === undefined) return undefined;
@@ -92,8 +90,6 @@ var Half = (function() {
   };
 
   this.request = function(uri, meth, data, onSuccess, onError) {
-
-    if (self._mockedHttps) return self._mockedHttps.push([ uri, meth, data ]);
 
     var async = true
 
