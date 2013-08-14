@@ -5,9 +5,13 @@ A javascript library to navigate through a web of [half](https://github.com/jmet
 
 Depends on [jQuery](http://jquery.com).
 
+There's currently no intention of implementing the whole of HALf.
+
+
 ## usage
 
 TODO
+
 
 ## license
 

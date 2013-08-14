@@ -27,7 +27,7 @@ var Half = (function() {
 
   var self = this;
 
-  var link = function(rel) {
+  var link = function(rel, params) {
 
     if (this._links === undefined) return undefined;
 
@@ -41,7 +41,13 @@ var Half = (function() {
       }
     }
 
-    return (l || {}).href;
+    if ( ! l) return undefined;
+    if ( ! l.templated) return l.href;
+
+    var h = l.href;
+    for (var k in params) { h = h.replace('{' + k + '}', params[k]); }
+
+    return h;
   };
 
   this.wrap = function(doc) {
