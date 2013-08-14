@@ -22,11 +22,14 @@
  * Made in Japan.
  */
 
+
 var Half = (function() {
 
   var self = this;
 
   var link = function(rel) {
+
+    if (this._links === undefined) return undefined;
 
     var l = this._links[rel];
 
@@ -37,8 +40,8 @@ var Half = (function() {
         break;
       }
     }
-    if (l) return l;
-    throw new Error("no rel '" + rel + "'")
+
+    return l;
   };
 
   this.wrap = function(doc) {
