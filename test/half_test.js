@@ -78,3 +78,24 @@ test('halfDoc.link(rel, values) returns the expanded link', function() {
     'http://example.com/jp/michinoku');
 });
 
+
+//
+// halfDoc.get(rel, params, onSuccess, onError)
+
+test('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
+
+  Half._mockedHttps = [];
+
+  var d = Half.wrap(
+    { _links: {
+      region: {
+        href: 'http://example.com/{country}/{region}',
+        templated: true } } });
+
+  d.get('region', { country: 'jp', region: 'michinoku' });
+
+  deepEqual(
+    Half._mockedHttps[0],
+    [ 'http://example.com/jp/michinoku', 'GET', null ]);
+});
+

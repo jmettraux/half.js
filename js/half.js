@@ -27,6 +27,8 @@ var Half = (function() {
 
   var self = this;
 
+  this._mockedHttps = null;
+
   var link = function(rel, params) {
 
     if (this._links === undefined) return undefined;
@@ -50,44 +52,51 @@ var Half = (function() {
     return h;
   };
 
+  var get = function(rel, params, onSuccess, onError) {
+
+    //if (onError === undefined) {
+    //  onError = onSuccess; onSuccess = params; params = {};
+    //}
+
+    Half.request(this.link(rel, params), 'GET', null, onSuccess, onError);
+  };
+
+  var post = function(rel, params, data, onSuccess, onError) {
+
+    //if (onError === undefined) {
+    //  onError = onSuccess; onSuccess = data; data = params; params = {};
+    //}
+
+    Half.request(this.link(rel, params), 'POST', data, onSuccess, onError);
+  };
+
   this.wrap = function(doc) {
 
     doc.link = link;
+    doc.get = get;
+    doc.post = post;
 
     return doc;
   };
 
-//  this.doRequest = function(uri, meth, data, onSuccess, onError) {
-//
-//    var async = true
-//
-//    var os = function(json) {
-//      onSuccess(adorn(json));
-//    };
-//    var oe = function(jqxhr, status, err) {
-//      if ( ! onError) return;
-//      var d = null;
-//      try { d = JSON.parse(jqxhr.responseText); } catch(ex) {}
-//      onError(d, jqxhr, status, err);
-//    };
-//
-//    $.ajax({ type: meth, url: uri, async: async, success: os, error: oe });
-//  };
-//
-//  this.go = function(endpoint, onSuccess, onError) {
-//    Half.doRequest(endpoint, 'GET', onSuccess, onError);
-//  };
-//
-//  var doGet = function(rel, params, onSuccess, onError) {
-//    if (params === undefined) {
-//      onError = onSuccess; onSuccess = params; params = {};
-//    }
-//  };
-//  var doPost = function(rel, params, data, onSuccess, onError) {
-//    if (params === undefined) {
-//      onError = onSuccess; onSuccess = params; params = {};
-//    }
-//  };
+  this.request = function(uri, meth, data, onSuccess, onError) {
+
+    if (self._mockedHttps) return self._mockedHttps.push([ uri, meth, data ]);
+
+    var async = true
+
+    var os = function(json) {
+      onSuccess(wrap(json));
+    };
+    var oe = function(jqxhr, status, err) {
+      if ( ! onError) return;
+      var d = null;
+      try { d = JSON.parse(jqxhr.responseText); } catch(ex) {}
+      onError(d, jqxhr, status, err);
+    };
+
+    $.ajax({ type: meth, url: uri, async: async, success: os, error: oe });
+  };
 
   return this;
 
