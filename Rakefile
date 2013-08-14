@@ -6,7 +6,8 @@ require 'rake/clean'
 LIBRARY =
   `pwd`.split('/').last.strip
 LICENSE_URI =
-  "http://github.com/jmettraux/#{LIBRARY}/LICENSE.txt"
+  #"http://github.com/jmettraux/#{LIBRARY}/LICENSE.txt"
+  'http://github.com/jmettraux/half.js/LICENSE.txt'
 
 COMPRESSOR =
   %w[ yui-compressor yuicompressor ].find { |com| `which #{com}`.strip != '' }
