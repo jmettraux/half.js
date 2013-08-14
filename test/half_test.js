@@ -10,7 +10,7 @@
 
 test('Half.wrap(doc) returns a doc with half functions', function() {
 
-  var d0 = { _links: { self: 'http://example.com/d0' } };
+  var d0 = { _links: { self: { href: 'http://example.com/d0' } } };
 
   var d1 = Half.wrap(d0);
 
@@ -36,7 +36,7 @@ test('halfDoc.link(rel) returns undefined if no link was found', function() {
 
 test('halfDoc.link(rel) returns the matching link', function() {
 
-  var d = Half.wrap({ _links: { 'self': 'http://example.com/d'} });
+  var d = Half.wrap({ _links: { self: { href: 'http://example.com/d' } } });
 
   equal(d.link('self'), 'http://example.com/d');
 });
@@ -44,7 +44,7 @@ test('halfDoc.link(rel) returns the matching link', function() {
 test('halfDoc.link(#rel) returns the matching link', function() {
 
   var d = Half.wrap(
-    { _links: { 'http://example.com/rels#toto': 'http://example.com/t'} }
+    { _links: { 'http://example.com/rels#toto': { href: 'http://example.com/t'} } }
   );
 
   equal(d.link('#toto'), 'http://example.com/t');
@@ -53,7 +53,7 @@ test('halfDoc.link(#rel) returns the matching link', function() {
 test('halfDoc.link(uri#rel) returns the matching link', function() {
 
   var d = Half.wrap(
-    { _links: { 'http://example.com/rels#toto': 'http://example.com/t'} }
+    { _links: { 'http://example.com/rels#toto': { href: 'http://example.com/t'} } }
   );
 
   equal(d.link('http://example.com/rels#toto'), 'http://example.com/t');

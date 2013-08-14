@@ -41,7 +41,7 @@ var Half = (function() {
       }
     }
 
-    return l;
+    return (l || {}).href;
   };
 
   this.wrap = function(doc) {
