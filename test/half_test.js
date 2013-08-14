@@ -99,3 +99,30 @@ test('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
     [ 'http://example.com/jp/michinoku', 'GET', null ]);
 });
 
+asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
+
+  Half._mockedHttps = null;
+
+  var d0 =
+    Half.wrap({ _links: { doc: { href: 'http://localhost:4567/doc' } } });
+
+  //console.log(JSON.stringify(d0));
+
+  d0.get(
+    'doc',
+    null,
+    function(data) {
+      //console.log(JSON.stringify(data));
+      equal(
+        JSON.stringify(data),
+        '{"name":"the doc",' +
+        '"_links":{"self":{"href":"http://localhost:4567/doc"}}}')
+      start();
+    },
+    function(d, jqxhr, status, err) {
+      console.log([ "error", d, status, err ]);
+      equal(false, true);
+      start();
+    });
+});
+

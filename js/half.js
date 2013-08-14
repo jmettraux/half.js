@@ -52,22 +52,34 @@ var Half = (function() {
     return h;
   };
 
+  var extractArgs = function(as) {
+
+    var a = []; for (var i = 0, l = as.length; i < l; i++) { a.push(as[i]) };
+
+    var n = null;
+    var o = {};
+    o.rel = a.shift();
+    o.params = (typeof a[0]) === 'function' ? {} : a.shift();
+    o.onSuccess = a.shift();
+    o.onError = a.shift();
+
+    return o;
+  }
+
   var get = function(rel, params, onSuccess, onError) {
 
-    //if (onError === undefined) {
-    //  onError = onSuccess; onSuccess = params; params = {};
-    //}
+    var a = extractArgs(arguments);
 
-    Half.request(this.link(rel, params), 'GET', null, onSuccess, onError);
+    Half.request(
+      this.link(a.rel, a.params), 'GET', null, a.onSuccess, a.onError);
   };
 
   var post = function(rel, params, data, onSuccess, onError) {
 
-    //if (onError === undefined) {
-    //  onError = onSuccess; onSuccess = data; data = params; params = {};
-    //}
+    var a = extractArgs(arguments);
 
-    Half.request(this.link(rel, params), 'POST', data, onSuccess, onError);
+    Half.request(
+      this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
   this.wrap = function(doc) {
@@ -86,7 +98,7 @@ var Half = (function() {
     var async = true
 
     var os = function(json) {
-      onSuccess(wrap(json));
+      onSuccess(Half.wrap(json));
     };
     var oe = function(jqxhr, status, err) {
       if ( ! onError) return;
