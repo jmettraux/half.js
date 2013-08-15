@@ -44,12 +44,20 @@ var Half = (function() {
     }
 
     if ( ! l) return undefined;
-    if ( ! l.templated) return l.href;
 
-    var h = l.href;
-    for (var k in params) { h = h.replace('{' + k + '}', params[k]); }
+    var ll = {}; for (var k in l) ll[k] = l[k];
+    ll.uri = ll.href;
 
-    return h;
+    if (ll.templated) {
+      for (var k in params) ll.uri = ll.uri.replace('{' + k + '}', params[k]);
+    }
+
+    return ll;
+  };
+
+  var uri = function(rel, params) {
+
+    return (this.link(rel, params) || {}).uri;
   };
 
   var extractArgs = function(as) {
@@ -86,6 +94,7 @@ var Half = (function() {
   this.wrap = function(doc) {
 
     doc.link = link;
+    doc.uri = uri;
     doc.get = get;
     doc.post = post;
 
@@ -105,12 +114,12 @@ var Half = (function() {
       onError = function() {};
     }
 
-    Half.request(uri, 'GET', null, onSuccess, onError, async);
+    Half.request({ uri: uri }, 'GET', null, onSuccess, onError, async);
 
     return d;
   }
 
-  this.request = function(uri, meth, data, onSuccess, onError, async) {
+  this.request = function(link, meth, data, onSuccess, onError, async) {
 
     if (async === undefined) async = true;
 
@@ -124,10 +133,11 @@ var Half = (function() {
       onError(d, jqxhr, status, err);
     };
 
-    params = { type: meth, url: uri, async: async, success: os, error: oe };
+    var params =
+      { type: meth, url: link.uri, async: async, success: os, error: oe };
 
     if (data) {
-      params.contentType = 'application/json; charset=utf-8'
+      params.contentType = 'application/json; charset=utf-8' // json+hal ?
       params.data = JSON.stringify(data);
     }
 

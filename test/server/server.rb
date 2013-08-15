@@ -37,9 +37,21 @@ get '/' do
     {
       name: 'root',
       _links: {
-        self:  { href: "#{U}/" },
-        doc:   { href: "#{U}/doc/{id}" },
-        docs:  { href: "#{U}/docs", method: 'POST' }
+        self: {
+          href: "#{U}/" },
+        doc: {
+          href: "#{U}/doc/{id}" },
+        docs:{
+          href: "#{U}/docs", method: 'POST' },
+        orders: {
+          href: "#{U}/orders",
+          method: 'POST',
+          fields: [
+            { name: 'name', required: true },
+            { name: 'age', required: true },
+            { name: 'code', default: 'batsu' },
+            { name: 'country', value: 'japan' }
+          ] }
       }
     }) +
   "\n"
@@ -67,8 +79,7 @@ get '/doc/:id' do
   end
 end
 
-options '/docs' do
-end
+options '/docs' do; end
 
 post '/docs' do
 
@@ -92,5 +103,13 @@ post '/docs' do
     "\"trace\":\"#{e.backtrace.first}\"," +
     "}\n"
   end
+end
+
+options '/orders' do; end
+
+post '/orders' do
+
+  request.body.read
+    # mirror...
 end
 
