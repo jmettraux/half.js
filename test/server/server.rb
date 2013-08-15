@@ -13,28 +13,49 @@ $docs = {
   'dublin0' => { message: 'hello world' }
 }
 
+U = 'http://localhost:4567'
 
-get '/doc' do
+
+#
+# but before...
+
+before do
 
   headers['Content-Type'] = 'application/json'
   headers['Access-Control-Allow-Origin'] = '*'
+end
+
+
+#
+# the routes
+
+
+get '/' do
+
+  Rufus::Json.pretty_encode(
+    {
+      name: 'root',
+      _links: {
+        self: { href: "#{U}/" },
+        doc: { href: "#{U}/doc/{id}" }
+      }
+    }) +
+  "\n"
+end
+
+get '/doc' do
 
   Rufus::Json.pretty_encode(
     {
       name: 'the doc',
       _links: {
-        self: {
-          href: 'http://localhost:4567/doc'
-        }
+        self: { href: "#{U}/doc" }
       }
     }) +
   "\n"
 end
 
 get '/doc/:id' do
-
-  headers['Content-Type'] = 'application/json'
-  headers['Access-Control-Allow-Origin'] = '*'
 
   if d = $docs[params[:id]]
     Rufus::Json.pretty_encode(d) + "\n"
@@ -46,9 +67,6 @@ end
 
 post '/docs' do
 
-  headers['Content-Type'] = 'application/json'
-  headers['Access-Control-Allow-Origin'] = '*'
-
   begin
 
     doc = Rufus::Json.decode(request.body.read)
@@ -56,7 +74,7 @@ post '/docs' do
 
     $docs[doc['id']] = doc
 
-    headers['Location'] = '/docs/' + doc['id']
+    headers['Location'] = "#{U}/docs/#{doc['id']}"
     "{\"message\":\"ok\"}\n"
 
   rescue => e

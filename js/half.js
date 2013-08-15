@@ -89,9 +89,27 @@ var Half = (function() {
     return doc;
   };
 
-  this.request = function(uri, meth, data, onSuccess, onError) {
+  this.go = function(uri, onSuccess, onError) {
 
-    var async = true
+    // warning: the synchronous mode locks the whole "page"
+
+    var async = true;
+    var d = undefined;
+
+    if (onSuccess === undefined) {
+      async = false;
+      onSuccess = function(doc) { d = doc; };
+      onError = function() {};
+    }
+
+    Half.request(uri, 'GET', null, onSuccess, onError, async);
+
+    return d;
+  }
+
+  this.request = function(uri, meth, data, onSuccess, onError, async) {
+
+    if (async === undefined) async = true;
 
     var os = function(json) {
       onSuccess(Half.wrap(json));

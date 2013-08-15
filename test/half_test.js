@@ -20,6 +20,34 @@ test('Half.wrap(doc) returns a doc with half functions', function() {
 
 
 //
+// Half.go(http://example.org)
+
+asyncTest('Half.go(uri, os, oe) GETs a new doc', function() {
+
+  Half.go(
+    'http://localhost:4567',
+    function(doc) {
+      console.log(JSON.stringify(doc));
+      equal(true, true)
+      start();
+    },
+    function(d, jqxhr, status, err) {
+      console.log([ "error", d, status, err ]);
+      equal(false, true);
+      start();
+    });
+});
+
+test('Half.go(uri, true) GETs a new doc (synchronous)', function() {
+
+  var doc = Half.go('http://localhost:4567')
+
+  console.log(JSON.stringify(doc));
+  equal(true, true);
+});
+
+
+//
 // halfDoc.link(rel)
 
 test('halfDoc.link(rel) returns undefined if there are no _links', function() {
@@ -78,13 +106,11 @@ test('halfDoc.link(rel, values) returns the expanded link', function() {
     'http://example.com/jp/michinoku');
 });
 
-
 //
 // halfDoc.get(rel, params, onSuccess, onError)
 
-asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
 
-  Half._mockedHttps = null;
+asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
 
   var d0 =
     Half.wrap({ _links: { doc: { href: 'http://localhost:4567/doc' } } });
