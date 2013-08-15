@@ -9,12 +9,8 @@ LIBRARY =
 LICENSE_URI =
   "http://github.com/jmettraux/#{LIBRARY}/LICENSE.txt"
 
-COMPRESSOR =
-  %w[ yui-compressor yuicompressor ].find { |com| `which #{com}`.strip != '' }
-
-raise(
-  "did not find yui-compressor (or yuicompressor) on this system"
-) unless COMPRESSOR
+CLOSURE_COMPILER_OPTIONS =
+  "--warning_level DEFAULT"
 
 
 #
@@ -50,9 +46,10 @@ task :package => :clean do
     FileUtils.cp(path, "pkg/#{fname}-#{version}.js")
 
     sh(
-      COMPRESSOR + ' ' +
-      path + ' ' +
-      "-o pkg/#{fname}-#{version}.min.js")
+      "java -jar tools/google-closure-compiler.jar " +
+      CLOSURE_COMPILER_OPTIONS +
+      " --js #{path}" +
+      " > pkg/#{fname}-#{version}.min.js")
 
     File.open("pkg/#{LIBRARY}-all-#{version}.js", 'ab') do |f|
       f.puts(File.read(path))
@@ -60,9 +57,10 @@ task :package => :clean do
   end
 
   sh(
-    COMPRESSOR + ' ' +
-    "pkg/#{LIBRARY}-all-#{version}.js " +
-    "-o pkg/#{LIBRARY}-all-#{version}.min.js"
+    "java -jar tools/google-closure-compiler.jar " +
+    CLOSURE_COMPILER_OPTIONS +
+    " --js pkg/#{LIBRARY}-all-#{version}.js" +
+    " > pkg/#{LIBRARY}-all-#{version}.min.js"
   ) if js_count > 1
 
   Dir["pkg/*-#{version}.min.js"].each do |path|
