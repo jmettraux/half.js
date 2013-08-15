@@ -25,6 +25,8 @@
 
 var Half = (function() {
 
+  var VERSION = '0.9.0';
+
   var self = this;
 
   var link = function(rel, params) {
