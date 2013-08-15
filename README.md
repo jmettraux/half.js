@@ -13,6 +13,21 @@ There's currently no intention of implementing the whole of HALf.
 TODO
 
 
+## testing
+
+To prepare the test server:
+```
+cd test/server && bundle install
+```
+
+To run the test server:
+```
+cd test/server && bundle exec ruby server.rb
+```
+
+Then point your browser to test/test.html
+
+
 ## license
 
 MIT (see [LICENSE.txt](LICENSE.txt)).
