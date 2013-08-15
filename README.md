@@ -10,6 +10,26 @@ There's currently no intention of implementing the whole of HALf.
 
 ## usage
 
+half.js comes as a library. The entry point is the ```Half``` object.
+
+The ```Half``` object sports two conveniences methods which return/produce "half docs".
+
+Half docs are plain javascript objects (HAL flavoured) with extra methods for navigating the web they come from (or point to).
+
+### Half.wrap
+
+TODO
+
+### Half.go
+
+TODO
+
+### halfDoc.get
+
+TODO
+
+### halfDoc.post
+
 TODO
 
 
