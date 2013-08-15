@@ -103,7 +103,7 @@ var Half = (function() {
 
     var a = extractArgs('GET', arguments);
 
-    Half.request(
+    request(
       this.link(a.rel, a.params), 'GET', null, a.onSuccess, a.onError);
   };
 
@@ -111,7 +111,7 @@ var Half = (function() {
 
     var a = extractArgs('POST', arguments);
 
-    Half.request(
+    request(
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
@@ -138,7 +138,7 @@ var Half = (function() {
       onError = function() {};
     }
 
-    Half.request({ uri: uri }, 'GET', null, onSuccess, onError, async);
+    request({ uri: uri }, 'GET', null, onSuccess, onError, async);
 
     return d;
   }
@@ -162,7 +162,7 @@ var Half = (function() {
     return data;
   };
 
-  this.request = function(link, meth, data, onSuccess, onError, async) {
+  var request = function(link, meth, data, onSuccess, onError, async) {
 
     if (async === undefined) async = true;
 
