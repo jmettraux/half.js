@@ -64,7 +64,6 @@ var Half = (function() {
 
     var a = []; for (var i = 0, l = as.length; i < l; i++) { a.push(as[i]) };
 
-    var n = null;
     var o = {};
     o.rel = a.shift();
     o.params = (typeof a[0]) === 'function' ? {} : a.shift();
@@ -119,6 +118,25 @@ var Half = (function() {
     return d;
   }
 
+  this.enforceFields = function(link, data) {
+
+    if ( ! link.fields) return data;
+
+    for (var i = 0, l = link.fields.length; i < l; i++) {
+
+      var f = link.fields[i];
+      var v = data[f.name];
+      var n = v === undefined || v === null;
+
+      if (f.required && n) throw new Error("field '" + f.name + "' required");
+
+      if (n && f.default) data[f.name] = f.default;
+      if (f.value) data[f.name] = f.value;
+    }
+
+    return data;
+  };
+
   this.request = function(link, meth, data, onSuccess, onError, async) {
 
     if (async === undefined) async = true;
@@ -137,7 +155,11 @@ var Half = (function() {
       { type: meth, url: link.uri, async: async, success: os, error: oe };
 
     if (data) {
+
       params.contentType = 'application/json; charset=utf-8' // json+hal ?
+
+      data = this.enforceFields(link, data);
+
       params.data = JSON.stringify(data);
     }
 

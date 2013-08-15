@@ -211,25 +211,42 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) POSTs', function() {
     });
 });
 
+test('halfDoc.post(rel, params, data, os, oe) throws on missing fields', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  try {
+    d0.post(
+      'orders',
+      null,
+      {});
+    equal(false, true);
+  }
+  catch (e) {
+    equal(true, true);
+  }
+});
+
 asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() {
 
   var d0 = Half.go('http://localhost:4567')
 
-  console.log(d0);
-
-  //d0.post(
-  //  'docs',
-  //  null,
-  //  { id: 'dublin1', name: 'nada' },
-  //  function(doc) {
-  //    //console.log(doc);
-  //    equal(doc.message, 'ok')
-  //    start();
-  //  },
-  //  function(d, jqxhr, status, err) {
-  //    console.log([ "error", d, status, err ]);
-  //    equal(false, true);
-  //    start();
-  //  });
+  d0.post(
+    'orders',
+    null,
+    { name: 'alf', age: 30 },
+    function(doc) {
+      //console.log(doc);
+      equal(doc.name, 'alf');
+      equal(doc.age, 30);
+      equal(doc.code, 'batsu');
+      equal(doc.country, 'japan');
+      start();
+    },
+    function(d, jqxhr, status, err) {
+      console.log([ "error", d, status, err ]);
+      equal(false, true);
+      start();
+    });
 });
 
