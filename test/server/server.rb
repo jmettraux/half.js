@@ -91,7 +91,7 @@ post '/docs' do
     $docs[doc['id']] = doc
 
     headers['Location'] = "#{U}/docs/#{doc['id']}"
-    "{\"message\":\"ok\"}\n"
+    Rufus::Json.pretty_encode(message: 'ok', doc: doc) + "\n"
 
   rescue => e
 

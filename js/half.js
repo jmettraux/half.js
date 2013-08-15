@@ -60,23 +60,48 @@ var Half = (function() {
     return (this.link(rel, params) || {}).uri;
   };
 
-  var extractArgs = function(as) {
-
-    var a = []; for (var i = 0, l = as.length; i < l; i++) { a.push(as[i]) };
+  var extractArgs = function(meth, as) {
 
     var o = {};
-    o.rel = a.shift();
-    o.params = (typeof a[0]) === 'function' ? {} : a.shift();
-    o.data = (typeof a[0]) === 'function' ? {} : a.shift();
-    o.onSuccess = a.shift();
-    o.onError = a.shift();
+
+    for (var i = 0, l = as.length; i < l; i++) {
+
+      var mismatch = false;
+      var t = (typeof as[i]);
+
+      if (t === 'string') {
+        if (o.rel) mismatch = true;
+        o.rel = as[i];
+      }
+      else if (t === 'object') {
+        if (o.data) mismatch = true;
+        if ( ! o.params) o.params = as[i]; else o.data = as[i];
+      }
+      else if (t === 'function') {
+        if (o.onError) mismatch = true;
+        if (o.onSuccess) o.onError = as[i]; else o.onSuccess = as[i];
+      }
+      else if (t === 'boolean') {
+        if (o.async) mismatch = true;
+        o.async = as[i];
+      }
+      if (mismatch) throw new Error("args mismatch (at '" + as[i] + "')");
+    }
+
+    if (meth === 'POST' && o.params && ! o.data) {
+      o.data = o.params;
+      o.params = null;
+    }
+    if (meth === 'POST' && ! o.data) {
+      throw new Error("missing POST data arg");
+    }
 
     return o;
   }
 
   var get = function(rel, params, onSuccess, onError) {
 
-    var a = extractArgs(arguments);
+    var a = extractArgs('GET', arguments);
 
     Half.request(
       this.link(a.rel, a.params), 'GET', null, a.onSuccess, a.onError);
@@ -84,7 +109,7 @@ var Half = (function() {
 
   var post = function(rel, params, data, onSuccess, onError) {
 
-    var a = extractArgs(arguments);
+    var a = extractArgs('POST', arguments);
 
     Half.request(
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
@@ -118,7 +143,7 @@ var Half = (function() {
     return d;
   }
 
-  this.enforceFields = function(link, data) {
+  var enforceFields = function(link, data) {
 
     if ( ! link.fields) return data;
 
@@ -158,7 +183,7 @@ var Half = (function() {
 
       params.contentType = 'application/json; charset=utf-8' // json+hal ?
 
-      data = this.enforceFields(link, data);
+      data = enforceFields(link, data);
 
       params.data = JSON.stringify(data);
     }

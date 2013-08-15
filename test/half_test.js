@@ -201,7 +201,28 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) POSTs', function() {
     { id: 'dublin1', name: 'nada' },
     function(doc) {
       //console.log(doc);
-      equal(doc.message, 'ok')
+      equal(doc.message, 'ok');
+      start();
+    },
+    function(d, jqxhr, status, err) {
+      console.log([ "error", d, status, err ]);
+      equal(false, true);
+      start();
+    });
+});
+
+asyncTest('halfDoc.post(rel, data, os, oe) POSTs', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.post(
+    'docs',
+    { id: 'dublin2', name: 'rien du tout' },
+    function(doc) {
+      //console.log(doc);
+      equal(doc.message, 'ok');
+      equal(doc.doc.id, 'dublin2');
+      equal(doc.doc.name, 'rien du tout');
       start();
     },
     function(d, jqxhr, status, err) {

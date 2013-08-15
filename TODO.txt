@@ -1,4 +1,4 @@
 
-[ ] allow for post without params (args.pop instead of args.shift)
+[o] allow for post without params (args.pop instead of args.shift)
 [ ] implement the curie thinggy
 
