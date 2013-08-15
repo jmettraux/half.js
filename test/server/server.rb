@@ -21,8 +21,9 @@ U = 'http://localhost:4567'
 
 before do
 
-  headers['Content-Type'] = 'application/json'
+  headers['Content-Type'] ='application/json'
   headers['Access-Control-Allow-Origin'] = '*'
+  headers['Access-Control-Allow-Headers'] = 'origin, content-type'
 end
 
 
@@ -36,8 +37,9 @@ get '/' do
     {
       name: 'root',
       _links: {
-        self: { href: "#{U}/" },
-        doc: { href: "#{U}/doc/{id}" }
+        self:  { href: "#{U}/" },
+        doc:   { href: "#{U}/doc/{id}" },
+        docs:  { href: "#{U}/docs", method: 'POST' }
       }
     }) +
   "\n"
@@ -65,6 +67,9 @@ get '/doc/:id' do
   end
 end
 
+options '/docs' do
+end
+
 post '/docs' do
 
   begin
@@ -80,7 +85,12 @@ post '/docs' do
   rescue => e
 
     status 400
-    "{\"message\":\"error\", \"error message\":\"#{e}\"}\n"
+
+    "{" +
+    "\"message\":\"error\", " +
+    "\"error message\":\"#{e}\"," +
+    "\"trace\":\"#{e.backtrace.first}\"," +
+    "}\n"
   end
 end
 

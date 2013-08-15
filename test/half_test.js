@@ -110,9 +110,9 @@ test('halfDoc.link(rel, values) returns the expanded link', function() {
     'http://example.com/jp/michinoku');
 });
 
+
 //
 // halfDoc.get(rel, params, onSuccess, onError)
-
 
 asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
 
@@ -130,6 +130,30 @@ asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
         JSON.stringify(data),
         '{"name":"the doc",' +
         '"_links":{"self":{"href":"http://localhost:4567/doc"}}}')
+      start();
+    },
+    function(d, jqxhr, status, err) {
+      console.log([ "error", d, status, err ]);
+      equal(false, true);
+      start();
+    });
+});
+
+
+//
+// halfDoc.post(rel, params, data, onSuccess, onError)
+
+asyncTest('halfDoc.post(rel, params, data, os, oe) GETs a new doc', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.post(
+    'docs',
+    null,
+    { id: 'dublin1', name: 'nada' },
+    function(doc) {
+      //console.log(doc);
+      equal(doc.message, 'ok')
       start();
     },
     function(d, jqxhr, status, err) {

@@ -58,6 +58,7 @@ var Half = (function() {
     var o = {};
     o.rel = a.shift();
     o.params = (typeof a[0]) === 'function' ? {} : a.shift();
+    o.data = (typeof a[0]) === 'function' ? {} : a.shift();
     o.onSuccess = a.shift();
     o.onError = a.shift();
 
@@ -121,7 +122,14 @@ var Half = (function() {
       onError(d, jqxhr, status, err);
     };
 
-    $.ajax({ type: meth, url: uri, async: async, success: os, error: oe });
+    params = { type: meth, url: uri, async: async, success: os, error: oe };
+
+    if (data) {
+      params.contentType = 'application/json; charset=utf-8'
+      params.data = JSON.stringify(data);
+    }
+
+    $.ajax(params);
   };
 
   return this;
