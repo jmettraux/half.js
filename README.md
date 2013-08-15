@@ -18,9 +18,28 @@ Half docs are plain javascript objects (HAL flavoured) with extra methods for na
 
 ### Half.wrap
 
-TODO
+Wraps a plain document and returns a HalfDoc instance.
+
+```javascript
+var d =
+  { name: "my stuff",
+    _links: { self: { href: 'http://example.com/my_stuff' } } };
+
+var hd = Half.wrap(d);
+
+hd.uri('self')
+  // --> "http://example.com/my_stuff"
+```
 
 ### Half.go
+
+TODO
+
+### halfDoc.link
+
+TODO
+
+### halfDoc.uri
 
 TODO
 
