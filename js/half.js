@@ -29,7 +29,19 @@ var Half = (function() {
 
   var self = this;
 
-  var link = function(rel, params) {
+  // the prototype for half docs
+  //
+  var halfDoc = {};
+
+  // the constructor for half docs
+  //
+  var HalfDoc = function() {};
+  HalfDoc.prototype = halfDoc;
+
+  //
+  // half doc methods
+
+  halfDoc.link = function(rel, params) {
 
     if (this._links === undefined) return undefined;
 
@@ -55,12 +67,12 @@ var Half = (function() {
     return ll;
   };
 
-  var uri = function(rel, params) {
+  halfDoc.uri = function(rel, params) {
 
     return (this.link(rel, params) || {}).uri;
   };
 
-  var extractArgs = function(meth, as) {
+  halfDoc.extractArgs = function(meth, as) {
 
     var o = {};
 
@@ -99,30 +111,35 @@ var Half = (function() {
     return o;
   }
 
-  var get = function(rel, params, onSuccess, onError) {
+  halfDoc.get = function(rel, params, onSuccess, onError) {
 
-    var a = extractArgs('GET', arguments);
+    var a = this.extractArgs('GET', arguments);
 
     request(
       this.link(a.rel, a.params), 'GET', null, a.onSuccess, a.onError);
   };
 
-  var post = function(rel, params, data, onSuccess, onError) {
+  halfDoc.post = function(rel, params, data, onSuccess, onError) {
 
-    var a = extractArgs('POST', arguments);
+    var a = this.extractArgs('POST', arguments);
 
     request(
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
+  //
+  // Half functions
+
+  // Returns a new doc which is a shallow copy of the original but with a
+  // halfDoc prototype.
+  //
   this.wrap = function(doc) {
 
-    doc.link = link;
-    doc.uri = uri;
-    doc.get = get;
-    doc.post = post;
+    var hd = new HalfDoc();
+    //for (var p in doc) { if (doc.hasOwnProperty(p)) hd[p] = doc[p]; }
+    for (var p in doc) { hd[p] = doc[p]; } // sufficient for plain JSON docs
 
-    return doc;
+    return hd;
   };
 
   this.go = function(uri, onSuccess, onError) {
