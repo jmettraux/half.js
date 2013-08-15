@@ -33,6 +33,7 @@ task :package => :clean do
   )[1]
 
   sha = `git log -1 --format="%H"`.strip[0, 7]
+  now = Time.now.to_s
 
   sh 'mkdir -p pkg'
 
@@ -75,12 +76,12 @@ task :package => :clean do
 
   Dir["pkg/*-#{version}.min.js"].each do |path|
     File.open(path, 'ab') { |f|
-      f.puts("\n/* compressed from commit #{sha} */\n")
+      f.puts("\n/* compressed from commit #{sha} on #{now} */\n")
     }
   end
   Dir["pkg/*-#{version}.js"].each do |path|
     File.open(path, 'ab') { |f|
-      f.puts("\n/* from commit #{sha} */\n")
+      f.puts("\n/* from commit #{sha} on #{now} */\n")
     }
   end
 end
