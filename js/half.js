@@ -155,7 +155,7 @@ var Half = (function() {
 
       if (f.required && n) throw new Error("field '" + f.name + "' required");
 
-      if (n && f.default) data[f.name] = f.default;
+      if (n && f['default']) data[f.name] = f['default'];
       if (f.value) data[f.name] = f.value;
     }
 
