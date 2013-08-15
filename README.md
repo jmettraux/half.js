@@ -28,6 +28,11 @@ cd test/server && bundle exec ruby server.rb
 Then point your browser to test/test.html
 
 
+## misc
+
+This repository includes the Google Closure compiler jar as a build tool (Apache licensed).
+
+
 ## license
 
 MIT (see [LICENSE.txt](LICENSE.txt)).
