@@ -29,6 +29,9 @@ var Half = (function() {
 
   var self = this;
 
+  //
+  // the halfDoc prototype and the HalfDoc constructor
+
   // the prototype for half docs
   //
   var halfDoc = {};
@@ -72,48 +75,9 @@ var Half = (function() {
     return (this.link(rel, params) || {}).uri;
   };
 
-  halfDoc.extractArgs = function(meth, as) {
-
-    var o = {};
-
-    for (var i = 0, l = as.length; i < l; i++) {
-
-      var mismatch = false;
-      var t = (typeof as[i]);
-
-      if (t === 'string') {
-        if (o.rel) mismatch = true;
-        o.rel = as[i];
-      }
-      else if (t === 'object') {
-        if (o.data) mismatch = true;
-        if ( ! o.params) o.params = as[i]; else o.data = as[i];
-      }
-      else if (t === 'function') {
-        if (o.onError) mismatch = true;
-        if (o.onSuccess) o.onError = as[i]; else o.onSuccess = as[i];
-      }
-      else if (t === 'boolean') {
-        if (o.async) mismatch = true;
-        o.async = as[i];
-      }
-      if (mismatch) throw new Error("args mismatch (at '" + as[i] + "')");
-    }
-
-    if (meth === 'POST' && o.params && ! o.data) {
-      o.data = o.params;
-      o.params = null;
-    }
-    if (meth === 'POST' && ! o.data) {
-      throw new Error("missing POST data arg");
-    }
-
-    return o;
-  }
-
   halfDoc.get = function(rel, params, onSuccess, onError) {
 
-    var a = this.extractArgs('GET', arguments);
+    var a = extractArgs('GET', arguments);
 
     request(
       this.link(a.rel, a.params), 'GET', null, a.onSuccess, a.onError);
@@ -121,7 +85,7 @@ var Half = (function() {
 
   halfDoc.post = function(rel, params, data, onSuccess, onError) {
 
-    var a = this.extractArgs('POST', arguments);
+    var a = extractArgs('POST', arguments);
 
     request(
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
@@ -158,6 +122,48 @@ var Half = (function() {
     request({ uri: uri }, 'GET', null, onSuccess, onError, async);
 
     return d;
+  }
+
+  //
+  // backstage functions
+
+  var extractArgs = function(meth, as) {
+
+    var o = {};
+
+    for (var i = 0, l = as.length; i < l; i++) {
+
+      var mismatch = false;
+      var t = (typeof as[i]);
+
+      if (t === 'string') {
+        if (o.rel) mismatch = true;
+        o.rel = as[i];
+      }
+      else if (t === 'object') {
+        if (o.data) mismatch = true;
+        if ( ! o.params) o.params = as[i]; else o.data = as[i];
+      }
+      else if (t === 'function') {
+        if (o.onError) mismatch = true;
+        if (o.onSuccess) o.onError = as[i]; else o.onSuccess = as[i];
+      }
+      else if (t === 'boolean') {
+        if (o.async) mismatch = true;
+        o.async = as[i];
+      }
+      if (mismatch) throw new Error("args mismatch (at '" + as[i] + "')");
+    }
+
+    if (meth === 'POST' && o.params && ! o.data) {
+      o.data = o.params;
+      o.params = null;
+    }
+    if (meth === 'POST' && ! o.data) {
+      throw new Error("missing POST data arg");
+    }
+
+    return o;
   }
 
   var enforceFields = function(link, data) {
@@ -207,6 +213,9 @@ var Half = (function() {
 
     $.ajax(params);
   };
+
+  //
+  // over.
 
   return this;
 
