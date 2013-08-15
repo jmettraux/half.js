@@ -27,8 +27,10 @@ asyncTest('Half.go(uri, os, oe) GETs a new doc', function() {
   Half.go(
     'http://localhost:4567',
     function(doc) {
-      console.log(JSON.stringify(doc));
-      equal(true, true)
+      //console.log(JSON.stringify(doc));
+      equal(
+        doc.link('self'),
+        'http://localhost:4567/')
       start();
     },
     function(d, jqxhr, status, err) {
@@ -42,8 +44,10 @@ test('Half.go(uri, true) GETs a new doc (synchronous)', function() {
 
   var doc = Half.go('http://localhost:4567')
 
-  console.log(JSON.stringify(doc));
-  equal(true, true);
+  //console.log(JSON.stringify(doc));
+  equal(
+    doc.link('self'),
+    'http://localhost:4567/')
 });
 
 
