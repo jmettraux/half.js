@@ -187,6 +187,24 @@ asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
     });
 });
 
+asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'doc',
+    { id: 'dublin0' },
+    function(doc) {
+      equal(JSON.stringify(doc), '{"message":"hello world"}');
+      start();
+    },
+    function(err) {
+      console.log(err);
+      equal(false, true);
+      start();
+    });
+});
+
 
 //
 // halfDoc.post(rel, params, data, onSuccess, onError)

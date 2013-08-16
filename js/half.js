@@ -67,6 +67,8 @@ var Half = (function() {
       for (var k in params) ll.uri = ll.uri.replace('{' + k + '}', params[k]);
     }
 
+    // TODO: throw error on remaining "{" ?
+
     return ll;
   };
 

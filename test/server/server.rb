@@ -40,7 +40,8 @@ get '/' do
         self: {
           href: "#{U}/" },
         doc: {
-          href: "#{U}/doc/{id}" },
+          href: "#{U}/doc/{id}",
+          templated: true },
         docs:{
           href: "#{U}/docs", method: 'POST' },
         orders: {
