@@ -190,13 +190,20 @@ var Half = (function() {
     if (async === undefined) async = true;
 
     var os = function(json) {
+
       onSuccess(Half.wrap(json));
     };
+
     var oe = function(jqxhr, status, err) {
+
       if ( ! onError) return;
-      var d = null;
-      try { d = JSON.parse(jqxhr.responseText); } catch(ex) {}
-      onError(d, jqxhr, status, err);
+
+      var t = jqxhr.responseText;
+      var d = undefined; try { d = JSON.parse(t); } catch(ex) {}
+
+      var e = { text: t, data: d, jqxhr: jqxhr, status: status, err: err };
+
+      onError(e);
     };
 
     var params =

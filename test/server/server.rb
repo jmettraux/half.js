@@ -51,7 +51,11 @@ get '/' do
             { name: 'age', required: true },
             { name: 'code', default: 'batsu' },
             { name: 'country', value: 'japan' }
-          ] }
+          ] },
+        err0: {
+          href: "#{U}/error0" },
+        err1: {
+          href: "#{U}/error1" }
       }
     }) +
   "\n"
@@ -111,5 +115,19 @@ post '/orders' do
 
   request.body.read
     # mirror...
+end
+
+get '/error0' do
+
+  status 500
+
+  'fail!'
+end
+
+get '/error1' do
+
+  status 500
+
+  "{\"error message\":\"fail!\"}\n"
 end
 

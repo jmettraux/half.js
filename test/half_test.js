@@ -33,8 +33,8 @@ asyncTest('Half.go(uri, os, oe) GETs a new doc', function() {
         'http://localhost:4567/')
       start();
     },
-    function(d, jqxhr, status, err) {
-      console.log([ "error", d, status, err ]);
+    function(err) {
+      console.log(err);
       equal(false, true);
       start();
     });
@@ -180,8 +180,8 @@ asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
         '"_links":{"self":{"href":"http://localhost:4567/doc"}}}')
       start();
     },
-    function(d, jqxhr, status, err) {
-      console.log([ "error", d, status, err ]);
+    function(err) {
+      console.log(err);
       equal(false, true);
       start();
     });
@@ -204,8 +204,8 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) POSTs', function() {
       equal(doc.message, 'ok');
       start();
     },
-    function(d, jqxhr, status, err) {
-      console.log([ "error", d, status, err ]);
+    function(err) {
+      console.log(err);
       equal(false, true);
       start();
     });
@@ -225,8 +225,8 @@ asyncTest('halfDoc.post(rel, data, os, oe) POSTs', function() {
       equal(doc.doc.name, 'rien du tout');
       start();
     },
-    function(d, jqxhr, status, err) {
-      console.log([ "error", d, status, err ]);
+    function(err) {
+      console.log(err);
       equal(false, true);
       start();
     });
@@ -264,10 +264,55 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() 
       equal(doc.country, 'japan');
       start();
     },
-    function(d, jqxhr, status, err) {
-      console.log([ "error", d, status, err ]);
+    function(err) {
+      console.log(err);
       equal(false, true);
       start();
     });
+});
+
+//
+// errors
+
+asyncTest('halfDoc.get(...) onError (plain text)', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'err0',
+    function(doc) {
+      equal(false, true);
+      start();
+    },
+    function(err) {
+      //console.log(err);
+      equal(err.data, undefined);
+      equal(err.text, 'fail!');
+      equal(err.jqxhr.responseText, 'fail!');
+      equal(err.err, 'Internal Server Error');
+      equal(err.status, 'error');
+      start();
+    })
+});
+
+asyncTest('halfDoc.get(...) onError (json)', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'err1',
+    function(doc) {
+      equal(false, true);
+      start();
+    },
+    function(err) {
+      //console.log(err);
+      deepEqual(err.data, { 'error message': 'fail!' })
+      equal($.trim(err.text), '{"error message":"fail!"}');
+      equal($.trim(err.jqxhr.responseText), '{"error message":"fail!"}');
+      equal(err.err, 'Internal Server Error');
+      equal(err.status, 'error');
+      start();
+    })
 });
 
