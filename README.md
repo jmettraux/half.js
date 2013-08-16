@@ -51,6 +51,35 @@ TODO
 
 TODO
 
+### halfDoc.embeds(embKey)
+
+Given an _embedded key, returns the list of corresponding, embedded docs, as half docs.
+
+```javascript
+var d =
+  { name: "my stuff",
+    _links: {
+      self: { href: 'http://example.com/my_stuff' }
+    },
+    _embedded: {
+      books: [
+        { name: 'essais',
+          author: 'Montaigne',
+          _links: { self: { href: 'http://example.com/books/essais' } } }
+        { name: 'de rerum natura',
+          author: 'Lucretius',
+          _links: { self: { href: 'http://example.com/books/natura' } } }
+      ]
+    } };
+
+var hd = Half.wrap(d);
+
+var books = hd.embeds('books');
+
+books[0].uri('self')
+  // --> "http://example.com/books/natura"
+```
+
 
 ## testing
 

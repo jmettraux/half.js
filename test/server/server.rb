@@ -53,6 +53,8 @@ get '/' do
             { name: 'code', default: 'batsu' },
             { name: 'country', value: 'japan' }
           ] },
+        order_list: {
+          href: "#{U}/orders" },
         err0: {
           href: "#{U}/error0" },
         err1: {
@@ -116,6 +118,24 @@ post '/orders' do
 
   request.body.read
     # mirror...
+end
+
+get '/orders' do
+
+  Rufus::Json.pretty_encode(
+    {
+      _links: {
+        self: { href: "#{U}/orders/" }
+      },
+      _embedded: {
+        orders: [
+          { id: 1, _links: { self: { href: "#{U}/orders/1" } } },
+          { id: 2, _links: { self: { href: "#{U}/orders/2" } } },
+          { id: 3, _links: { self: { href: "#{U}/orders/3" } } }
+        ]
+      }
+    }
+  ) + "\n"
 end
 
 get '/error0' do

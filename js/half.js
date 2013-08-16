@@ -93,6 +93,18 @@ var Half = (function() {
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
+  halfDoc.embeds = function(embeddedKey) {
+
+    var v = (this._embedded || {})[embeddedKey];
+
+    if ( ! v) return undefined;
+
+    var a = [];
+    for (var i = 0, l = v.length; i < l; i++) { a.push(Half.wrap(v[i])); }
+
+    return a;
+  };
+
   //
   // Half functions
 

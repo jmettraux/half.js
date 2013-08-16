@@ -334,3 +334,32 @@ asyncTest('halfDoc.get(...) onError (json)', function() {
     })
 });
 
+
+//
+// halfDoc.embeds(embeddedKey)
+
+test('halfDoc.embeds(embKey) returns undefined if there is no _embedded', function() {
+
+  var d = Half.wrap({});
+
+  equal(d.embeds('nada'), undefined);
+});
+
+test('halfDoc.embeds(embKey) returns undefined if there is no corresponding _embedded key', function() {
+
+  var d = Half.wrap({ _embedded: {} });
+
+  equal(d.embeds('nada'), undefined);
+});
+
+test('halfDoc.embeds(embKey) returns the embedded half doc', function() {
+
+  var d = Half.go('http://localhost:4567/orders')
+
+  var es = d.embeds('orders');
+
+  equal(es.length, 3);
+  equal(es[0].id, 1);
+  equal(es[0].uri('self'), 'http://localhost:4567/orders/1');
+});
+
