@@ -10,7 +10,7 @@ LICENSE_URI =
   "http://github.com/jmettraux/#{LIBRARY}/LICENSE.txt"
 
 CLOSURE_COMPILER_OPTIONS =
-  "--warning_level DEFAULT"
+  '--warning_level DEFAULT'
 
 
 #
@@ -51,11 +51,11 @@ task :package => :clean do
       CLOSURE_COMPILER_OPTIONS +
       " --js #{path}" +
       " > pkg/#{fname}-#{version}.min.js")
-
-    File.open("pkg/#{LIBRARY}-all-#{version}.js", 'ab') do |f|
-      f.puts(File.read(path))
-    end if js_count > 1
   end
+
+  sh(
+    "cat js/*.js > pkg/#{LIBRARY}-all-#{version}.js"
+  ) if js_count > 1
 
   sh(
     "java -jar tools/google-closure-compiler.jar " +
