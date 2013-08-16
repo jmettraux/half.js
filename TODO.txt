@@ -1,4 +1,10 @@
 
 [o] allow for post without params (args.pop instead of args.shift)
+
 [ ] implement the curie thinggy
+
+[ ] provide a default, logging onError
+    (what about IE? Well, if no console, then no logging... (and no error))
+
+[ ] Half.go('/api') (absolute URI is an exception...)
 
