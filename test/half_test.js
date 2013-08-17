@@ -246,6 +246,25 @@ asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
     });
 });
 
+asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'search',
+    { query: 'rocky road' },
+    function(doc) {
+      //console.log(doc);
+      equal(doc.query, 'rocky road');
+      start();
+    },
+    function(err) {
+      console.log(err);
+      equal(false, true);
+      start();
+    });
+});
+
 
 //
 // halfDoc.post(rel, params, data, onSuccess, onError)

@@ -58,7 +58,10 @@ get '/' do
         err0: {
           href: "#{U}/error0" },
         err1: {
-          href: "#{U}/error1" }
+          href: "#{U}/error1" },
+        search: {
+          href: "#{U}/search{?query}",
+          templated: true }
       }
     }) +
   "\n"
@@ -150,5 +153,10 @@ get '/error1' do
   status 500
 
   "{\"error message\":\"fail!\"}\n"
+end
+
+get '/search' do
+
+  Rufus::Json.encode({ query: params[:query] }) + "\n"
 end
 
