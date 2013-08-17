@@ -61,9 +61,28 @@ var Half = (function() {
     if ( ! l) return undefined;
 
     var ll = {}; for (var k in l) ll[k] = l[k];
+
     ll.uri = ll.href;
 
     if (ll.templated) {
+
+      var m = ll.uri.match(/(.+)\{\?([^\}]+)\}$/);
+
+      if (m) {
+
+        ll.uri = m[1];
+
+        var ps = m[2].split(',');
+
+        for (var i = 0; i < ps.length; i++) {
+          var k = ps[i];
+          var v = params[k];
+          if (v === undefined) continue;
+          ll.uri = ll.uri + (ll.uri.indexOf('?') > 1 ? '&' : '?');
+          ll.uri = ll.uri + k + '=' + v;
+        }
+      }
+
       for (var k in params) ll.uri = ll.uri.replace('{' + k + '}', params[k]);
     }
 

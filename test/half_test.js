@@ -158,6 +158,29 @@ test('halfDoc.link(rel, values) returns the expanded link', function() {
   equal(l.uri, 'http://example.com/jp/michinoku');
 });
 
+test('halfDoc.link(rel, values) returns the expanded link (query)', function() {
+
+  var d = Half.wrap(
+    { _links: {
+      members: {
+        href: 'http://example.com/members{?query,count}',
+        templated: true } } });
+
+  var l = d.link('members', { query: 'alf', count: 2 })
+  equal(l.href, 'http://example.com/members{?query,count}');
+  equal(l.uri, 'http://example.com/members?query=alf&count=2');
+
+  var l = d.link('members', { query: 'alf' })
+  equal(l.href, 'http://example.com/members{?query,count}');
+  equal(l.uri, 'http://example.com/members?query=alf');
+
+  var l = d.link('members', { nada: 'alf' })
+  equal(l.href, 'http://example.com/members{?query,count}');
+  equal(l.uri, 'http://example.com/members');
+
+  // TODO: check for escaping?
+});
+
 
 //
 // halfDoc.get(rel, params, onSuccess, onError)
