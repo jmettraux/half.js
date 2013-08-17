@@ -86,7 +86,9 @@ var Half = (function() {
       for (var k in params) ll.uri = ll.uri.replace('{' + k + '}', params[k]);
     }
 
-    // TODO: throw error on remaining "{" ?
+    if (ll.uri.indexOf('{') > 0) {
+      throw new Error("could not fully expand, " + ll.uri);
+    }
 
     return ll;
   };

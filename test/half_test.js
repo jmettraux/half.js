@@ -177,8 +177,26 @@ test('halfDoc.link(rel, values) returns the expanded link (query)', function() {
   var l = d.link('members', { nada: 'alf' })
   equal(l.href, 'http://example.com/members{?query,count}');
   equal(l.uri, 'http://example.com/members');
+});
 
-  // TODO: check for escaping?
+test('halfDoc.link(rel, values) raises on unexpanded {stuff}', function() {
+
+  var d = Half.wrap(
+    { _links: {
+      region: {
+        href: 'http://example.com/{country}/{region}',
+        templated: true } } });
+
+  try {
+
+    d.link('region', { country: 'jp' })
+
+    equal(false, true);
+  }
+  catch(e) {
+
+    equal(true, true);
+  }
 });
 
 
