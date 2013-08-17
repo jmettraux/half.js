@@ -120,7 +120,28 @@ var Half = (function() {
     return hd;
   };
 
-  this.go = function(uri, onSuccess, onError) {
+  this.expand = function(path, href) {
+
+    if (path.match(/^https?:\/\//)) return path;
+
+    if (href === undefined) href = window.location.href;
+
+    if (href.match(/^file:/)) return 'http://localhost:4567/' + path;
+      // for testing
+
+    path = path.split('/');
+
+    var m = href.match(/^(https?:\/\/[^\/]+)([^\?]*)/)
+    var hbase = m[1];
+    var hpath = m[2].split('/'); hpath.pop();
+
+    if (path[0] === '') { hpath = []; }
+    else { while(path[0] === '..') { hpath.pop(); path.shift(); } }
+
+    return hbase + hpath.concat(path).join('/');
+  }
+
+  this.go = function(uriOrPath, onSuccess, onError) {
 
     // warning: the synchronous mode locks the whole "page"
 
@@ -133,7 +154,9 @@ var Half = (function() {
       onError = function() {};
     }
 
-    request({ uri: uri }, 'GET', null, onSuccess, onError, async);
+    var link = { uri: self.expand(uriOrPath) };
+
+    request(link, 'GET', null, onSuccess, onError, async);
 
     return d;
   }

@@ -363,3 +363,29 @@ test('halfDoc.embeds(embKey) returns the embedded half doc', function() {
   equal(es[0].uri('self'), 'http://localhost:4567/orders/1');
 });
 
+
+//
+// Half.expand(path)
+
+test('Half.expand(path) expands paths into uris', function() {
+
+  // this function is used inside of Half.go(uriOrPath)
+
+  equal(
+    Half.expand('api'),
+    'http://localhost:4567/api');
+
+  equal(
+    Half.expand('api', 'http://example.com/nada/home.html'),
+    'http://example.com/nada/api');
+  equal(
+    Half.expand('api', 'http://example.com/nada/'),
+    'http://example.com/nada/api');
+  equal(
+    Half.expand('/api', 'http://example.com/nada/home.html'),
+    'http://example.com/api');
+  equal(
+    Half.expand('../api', 'http://example.com/nada/nemo/home.html'),
+    'http://example.com/nada/api');
+});
+

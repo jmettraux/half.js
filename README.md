@@ -35,13 +35,33 @@ hd.uri('self')
 
 ### Half.go
 
+This method is used to got to the initial endpoint:
+
 ```javascript
 Half.go(
   'http://example.com/api/',
   function(doc) {
+    // success
   },
   function(err) {
+    // failure
   });
+```
+
+It can be used synchronously (this monopolizes the page loading):
+
+```javascript
+var TheApi = Half.go('http://example.com/api');
+```
+
+It understands relative path (relative to window.location) (both when synchronous and asynchronous):
+
+```javascript
+var TheApi = Half.go('/api');
+  // or
+var TheApi = Half.go('../api');
+  //
+  // etc...
 ```
 
 ### halfDoc.link
