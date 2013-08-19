@@ -73,27 +73,74 @@ If the link is templated (```"templated": true```), this function will attempt t
 ```javascript
 var d = Half.wrap(
   { _links: {
-    'self': {
+    self: {
       href: 'http://example.com/d' },
     'http://example.com/rels#toto': {
-      href: 'http://example.com/t'}
+      href: 'http://example.com/t' },
+    region: {
+      href: 'http://example.com/{country}/{region}',
+      templated: true },
+    members: {
+      href: 'http://example.com/members{?query,count}',
+      templated: true }
   } });
 
-d.link('self')
+d.link('self');
   // --> {
   //   rel: 'self',
   //   href: 'http://example.com/d',
   //   uri: 'http://example.com/d' }
-d.link('#toto')
+
+d.link('#toto');
   // --> {
   //   rel: 'http://example.com/rels#toto',
   //   href: 'http://example.com/t',
   //   uri: 'http://example.com/t' }
+
+d.link('region', { country: 'switzerland', region: 'west' });
+  // --> {
+  //   rel: 'region',
+  //   href: 'http://example.com/{country}/{region}',
+  //   uri: 'http://example.com/switzerland/west' }
+
+d.link('members', { query: 'alfred' });
+  // --> {
+  //   rel: 'members',
+  //   href: 'http://example.com/members{?query,count}',
+  //   uri: 'http://example.com/members?query=alfred' }
 ```
 
 ### halfDoc.uri
 
-TODO
+This function is merely a shortcut for ```halfDoc.link(rel).uri```:
+
+```javascript
+var d = Half.wrap(
+  { _links: {
+    self: {
+      href: 'http://example.com/d' },
+    'http://example.com/rels#toto': {
+      href: 'http://example.com/t' },
+    region: {
+      href: 'http://example.com/{country}/{region}',
+      templated: true },
+    members: {
+      href: 'http://example.com/members{?query,count}',
+      templated: true }
+  } });
+
+d.uri('self');
+  // --> 'http://example.com/d'
+
+d.uri('#toto');
+  // --> 'http://example.com/t'
+
+d.uri('region', { country: 'switzerland', region: 'west' });
+  // --> 'http://example.com/switzerland/west'
+
+d.uri('members', { query: 'alfred' });
+  // --> 'http://example.com/members?query=alfred'
+```
 
 ### halfDoc.get
 
