@@ -48,11 +48,13 @@ var Half = (function() {
 
     if (this._links === undefined) return undefined;
 
+    var lrel = rel;
     var l = this._links[rel];
 
     if (rel.match(/^#/)) {
       for (var r in this._links) {
         if (r.indexOf(rel, r.length - rel.length) < 0) continue;
+        lrel = r;
         l = this._links[r];
         break;
       }
@@ -62,6 +64,7 @@ var Half = (function() {
 
     var ll = {}; for (var k in l) ll[k] = l[k];
 
+    ll.rel = lrel;
     ll.uri = ll.href;
 
     if (ll.templated) {

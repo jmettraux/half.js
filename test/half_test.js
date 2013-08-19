@@ -94,6 +94,7 @@ test('halfDoc.link(rel) returns the matching link', function() {
   var d = Half.wrap({ _links: { self: { href: 'http://example.com/d' } } });
 
   var l = d.link('self');
+  equal(l.rel, 'self');
   equal(l.href, 'http://example.com/d');
   equal(l.uri, 'http://example.com/d');
 });
@@ -114,6 +115,7 @@ test('halfDoc.link(#rel) returns the matching link', function() {
   );
 
   var l = d.link('#toto');
+  equal(l.rel, 'http://example.com/rels#toto');
   equal(l.uri, 'http://example.com/t');
   equal(l.href, 'http://example.com/t');
 });
@@ -154,6 +156,7 @@ test('halfDoc.link(rel, values) returns the expanded link', function() {
 
   var l = d.link('region', { country: 'jp', region: 'michinoku' })
 
+  equal(l.rel, 'region');
   equal(l.href, 'http://example.com/{country}/{region}');
   equal(l.uri, 'http://example.com/jp/michinoku');
 });
@@ -167,6 +170,7 @@ test('halfDoc.link(rel, values) returns the expanded link (query)', function() {
         templated: true } } });
 
   var l = d.link('members', { query: 'alf', count: 2 })
+  equal(l.rel, 'members');
   equal(l.href, 'http://example.com/members{?query,count}');
   equal(l.uri, 'http://example.com/members?query=alf&count=2');
 
