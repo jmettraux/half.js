@@ -66,7 +66,30 @@ var TheApi = Half.go('../api');
 
 ### halfDoc.link
 
-TODO
+Given a rel (or just its fragment), returns the corresponding link.
+
+If the link is templated (```"templated": true```), this function will attempt to expand from ```href``` to ```uri```:
+
+```javascript
+var d = Half.wrap(
+  { _links: {
+    'self': {
+      href: 'http://example.com/d' },
+    'http://example.com/rels#toto': {
+      href: 'http://example.com/t'}
+  } });
+
+d.link('self')
+  // --> {
+  //   rel: 'self',
+  //   href: 'http://example.com/d',
+  //   uri: 'http://example.com/d' }
+d.link('#toto')
+  // --> {
+  //   rel: 'http://example.com/rels#toto',
+  //   href: 'http://example.com/t',
+  //   uri: 'http://example.com/t' }
+```
 
 ### halfDoc.uri
 
