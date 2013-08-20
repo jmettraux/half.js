@@ -144,7 +144,39 @@ d.uri('members', { query: 'alfred' });
 
 ### halfDoc.get
 
-TODO
+Given a rel (or a fragment of it) will GET the document pointed at by the underlying link.
+
+```javascript
+// note: use Half.go(uri, ...) instead of wrap
+
+var d0 = Half.wrap(
+  { _links: {
+    region: {
+      href: 'http://example.com/{country}/{region}',
+      templated: true }
+  } });
+
+var d1 = d0.get(
+  'region',
+  { country: 'Japan', region: 'michinoku' },
+  function(doc) {
+    console.log(JSON.stringify(doc));
+  }
+  function(err) {
+    console.log([ 'error getting region', err ]);
+  });
+
+// after a while, this code might output to the console:
+//
+{
+  "country": "Japan",
+  "region": "michinoku",
+  "city": "Sendai",
+  "_links": {
+    "self": { "href": "http://example.com/japan/michinoku" }
+  }
+}
+```
 
 ### halfDoc.post
 
