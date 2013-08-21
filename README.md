@@ -262,7 +262,13 @@ books[0].uri('self')
 
 ## the onError callback
 
-TODO
+The onError callback used by request halfDoc request methods (get, post, ...) returns an object with 5 entries.
+
+* jqxhr: since half.js is based on jQuery, this is simply the xhr object passed back by jQuery in case of error
+* status: the status as proviede by jQuery (```"error"```)
+* err: the error message as provided by jQuery
+* text: the body of the error response
+* data: if text is a JSON string, data will contain the parse result
 
 
 ## testing
