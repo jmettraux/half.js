@@ -217,7 +217,33 @@ Where data is a piece of data (generally an object) that gets turned into a JSON
 
 #### halfDoc.post to links with defined fields
 
-TODO
+In the case of a POST link that defines fields, half.js will enforce the fields before posting the request.
+
+```javascript
+{
+  _links: {
+    'http://example.com/rels#order-create': {
+      href: "http://example.com/orders",
+      method: 'POST',
+      fields: [
+        { name: 'name', required: true },
+        { name: 'age', required: true },
+        { name: 'code', default: 'none' },
+        { name: 'country', value: 'ch' }
+      ]
+    }
+  }
+}
+```
+
+When posting to ```#order-create```, half.js will ensure that
+
+* the data is an object (it has to have fields/properties)
+* the data has a "name" property and an "age" property
+* if the data has no "code" property, it gets one set to "none"
+* it adds a "country" property set to "ch"
+
+When there are no fields defined in the link, half.js simply passes the data as is, simply turning it into a JSON string.
 
 ### halfDoc.put
 
