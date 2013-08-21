@@ -71,7 +71,7 @@ Given a rel (or just its fragment), returns the corresponding link.
 If the link is templated (```"templated": true```), this function will attempt to expand from ```href``` to ```uri```:
 
 ```javascript
-var d = Half.wrap(
+var d = Half.wrap( // cheating using wrap
   { _links: {
     self: {
       href: 'http://example.com/d' },
@@ -115,7 +115,7 @@ d.link('members', { query: 'alfred' });
 This function is merely a shortcut for ```halfDoc.link(rel).uri```:
 
 ```javascript
-var d = Half.wrap(
+var d = Half.wrap( // cheating using wrap
   { _links: {
     self: {
       href: 'http://example.com/d' },
@@ -178,7 +178,44 @@ var d1 = d0.get(
 }
 ```
 
+This is the signature of the get function:
+
+```javascript
+halfDoc.get = function(rel, params, onSuccess, onError) {
+```
+
 ### halfDoc.post
+
+```javascript
+var d = Half.wrap( // cheating using wrap
+  { _links: {
+    'http://example.com/rels#doc-upload': {
+      href: 'http://example.com/docs',
+      method: 'POST' }
+  } });
+
+var newdoc = { id: 'dublin1', name: 'nada' },
+
+d.post(
+  '#doc-upload',
+  newdoc,
+  function(doc) {
+    console.log([ 'success', doc ]);
+  },
+  function(err) {
+    console.log([ 'failure', err ]);
+  });
+```
+
+This is the signature of the post function:
+
+```javascript
+halfDoc.post = function(rel, params, data, onSuccess, onError) {
+```
+
+Where data is a piece of data (generally an object) that gets turned into a JSON string and is used as the body of the post request.
+
+#### halfDoc.post to links with defined fields
 
 TODO
 
