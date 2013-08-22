@@ -110,6 +110,8 @@ d.link('members', { query: 'alfred' });
   //   uri: 'http://example.com/members?query=alfred' }
 ```
 
+If a mandatory expansion (not one in the query string) is missing. get/post/put/delete will fail, triggering the onError callback immediately with a message like "not fully expanded: http://localhost:4567/doc/{id}".
+
 ### halfDoc.uri
 
 This function is merely a shortcut for ```halfDoc.link(rel).uri```:

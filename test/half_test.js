@@ -183,26 +183,6 @@ test('halfDoc.link(rel, values) returns the expanded link (query)', function() {
   equal(l.uri, 'http://example.com/members');
 });
 
-test('halfDoc.link(rel, values) raises on unexpanded {stuff}', function() {
-
-  var d = Half.wrap(
-    { _links: {
-      region: {
-        href: 'http://example.com/{country}/{region}',
-        templated: true } } });
-
-  try {
-
-    d.link('region', { country: 'jp' })
-
-    equal(false, true);
-  }
-  catch(e) {
-
-    equal(true, true);
-  }
-});
-
 
 //
 // halfDoc.get(rel, params, onSuccess, onError)
@@ -284,6 +264,34 @@ asyncTest('halfDoc.get() triggers onError on unknown rel', function() {
       equal(err.text, "unknown rel 'nada'");
       equal(err.jqxhr, undefined);
       deepEqual(err.data, { error: "unknown rel 'nada'" });
+      start();
+    });
+});
+
+asyncTest('halfDoc.get() triggers onError on unexpanded {stuff}', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'doc',
+    function(doc) {
+      equal(false, true);
+      start();
+    },
+    function(err) {
+      //console.log(err);
+      equal(
+        err.status,
+        "error");
+      equal(
+        err.text,
+        "not fully expanded: http://localhost:4567/doc/{id}");
+      equal(
+        err.jqxhr,
+        undefined);
+      deepEqual(
+        err.data,
+        { error: "not fully expanded: http://localhost:4567/doc/{id}" });
       start();
     });
 });

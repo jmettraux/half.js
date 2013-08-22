@@ -60,7 +60,6 @@ var Half = (function() {
       }
     }
 
-    //if ( ! l) return undefined;
     if ( ! l) return { rel: rel };
 
     var ll = {}; for (var k in l) ll[k] = l[k];
@@ -88,10 +87,6 @@ var Half = (function() {
       }
 
       for (var k in params) ll.uri = ll.uri.replace('{' + k + '}', params[k]);
-    }
-
-    if (ll.uri.indexOf('{') > 0) {
-      throw new Error("could not fully expand, " + ll.uri);
     }
 
     return ll;
@@ -247,15 +242,20 @@ var Half = (function() {
     return data;
   };
 
+  var raise = function(onError, text) {
+
+    if ( ! onError) return;
+
+    onError({ text: text, data: { error: text }, status: 'error' });
+  }
+
   var request = function(link, meth, data, onSuccess, onError, async) {
 
     if (link.uri === undefined) {
-
-      if (onError) {
-        var t = "unknown rel '" + link.rel + "'"
-        onError({ text: t, data: { error: t }, status: 'error' });
-      }
-      return;
+      return raise(onError, "unknown rel '" + link.rel + "'");
+    }
+    if (link.uri.indexOf('{') > 0) {
+      return raise(onError, "not fully expanded: " + link.uri);
     }
 
     if (async === undefined) async = true;
@@ -282,17 +282,13 @@ var Half = (function() {
 
     if (data) {
 
-      params.contentType = 'application/json; charset=utf-8' // json+hal ?
+      params.contentType = 'application/json; charset=utf-8' // hal+json ?
 
       try {
         data = enforceFields(link, data);
       }
       catch (er) {
-        if (onError) {
-          var t = er.message;
-          onError({ text: t, data: { error: t }, status: 'error' });
-        }
-        return;
+        return raise(onError, er.message);
       }
 
       params.data = JSON.stringify(data);
