@@ -3,8 +3,7 @@
 [o] Half.go('/api') (absolute URI is an exception...)
 [x] provide a default, logging onError
     (what about IE? Well, if no console, then no logging... (and no error))
+[o] in case of form validation issue, use onError (do not raise immediately...)
 
 [ ] implement the curie thinggy
-
-[ ] in case of form validation issue, use onError (do not raise immediately...)
 

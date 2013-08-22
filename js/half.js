@@ -251,11 +251,10 @@ var Half = (function() {
 
     if (link.uri === undefined) {
 
-      var t = "unknown rel '" + link.rel + "'"
-
-      if (onError) onError({
-        text: t, data: { error: t }, status: 'error', jqxhr: undefined
-      });
+      if (onError) {
+        var t = "unknown rel '" + link.rel + "'"
+        onError({ text: t, data: { error: t }, status: 'error' });
+      }
       return;
     }
 
@@ -285,7 +284,16 @@ var Half = (function() {
 
       params.contentType = 'application/json; charset=utf-8' // json+hal ?
 
-      data = enforceFields(link, data);
+      try {
+        data = enforceFields(link, data);
+      }
+      catch (er) {
+        if (onError) {
+          var t = er.message;
+          onError({ text: t, data: { error: t }, status: 'error' });
+        }
+        return;
+      }
 
       params.data = JSON.stringify(data);
     }

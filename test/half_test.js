@@ -333,20 +333,24 @@ asyncTest('halfDoc.post(rel, data, os, oe) POSTs', function() {
     });
 });
 
-test('halfDoc.post(rel, params, data, os, oe) throws on missing fields', function() {
+test('halfDoc.post(rel, params, data, os, oe) triggers onError on missing fields', function() {
 
   var d0 = Half.go('http://localhost:4567')
 
-  try {
-    d0.post(
-      'orders',
-      null,
-      {});
-    equal(false, true);
-  }
-  catch (e) {
-    equal(true, true);
-  }
+  d0.post(
+    'orders',
+    {},
+    function(doc) {
+      equal(false, true);
+      start();
+    },
+    function(err) {
+      equal(err.jqxhr, undefined);
+      equal(err.status, "error");
+      equal(err.text, "field 'name' required");
+      deepEqual(err.data, { error: "field 'name' required" });
+      start();
+    });
 });
 
 asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() {

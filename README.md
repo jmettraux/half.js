@@ -249,6 +249,8 @@ When posting to ```#order-create```, half.js will ensure that
 
 When there are no fields defined in the link, half.js simply passes the data as is, simply turning it into a JSON string.
 
+If a required field is missing, the onError callback will immediately get triggered ```"field 'name' required"``` message.
+
 ### halfDoc.put
 
 TO IMPLEMENT
