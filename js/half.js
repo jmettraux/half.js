@@ -60,7 +60,8 @@ var Half = (function() {
       }
     }
 
-    if ( ! l) return undefined;
+    //if ( ! l) return undefined;
+    if ( ! l) return { rel: rel };
 
     var ll = {}; for (var k in l) ll[k] = l[k];
 
@@ -247,6 +248,16 @@ var Half = (function() {
   };
 
   var request = function(link, meth, data, onSuccess, onError, async) {
+
+    if (link.uri === undefined) {
+
+      var t = "unknown rel '" + link.rel + "'"
+
+      if (onError) onError({
+        text: t, data: { error: t }, status: 'error', jqxhr: undefined
+      });
+      return;
+    }
 
     if (async === undefined) async = true;
 

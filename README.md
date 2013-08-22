@@ -184,6 +184,8 @@ This is the signature of the get function:
 halfDoc.get = function(rel, params, onSuccess, onError) {
 ```
 
+If the rel cannot be matched to a link, the onError callback will immediately be triggered with a "unknown rel 'xxx'" message.
+
 ### halfDoc.post
 
 ```javascript
@@ -214,6 +216,8 @@ halfDoc.post = function(rel, params, data, onSuccess, onError) {
 ```
 
 Where data is a piece of data (generally an object) that gets turned into a JSON string and is used as the body of the post request.
+
+If the rel cannot be matched to a link, the onError callback will immediately be triggered with a "unknown rel 'xxx'" message.
 
 #### halfDoc.post to links with defined fields
 

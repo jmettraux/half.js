@@ -75,11 +75,11 @@ test('halfDoc.uri(rel) returns undefined if no link was found', function() {
   equal(d.uri('nada'), undefined)
 });
 
-test('halfDoc.link(rel) returns undefined if no link was found', function() {
+test('halfDoc.link(rel) returns { rel: rel } if no link was found', function() {
 
   var d = Half.wrap({ _links: {} });
 
-  equal(d.link('nada'), undefined)
+  deepEqual(d.link('nada'), { rel: 'nada' });
 });
 
 test('halfDoc.uri(rel) returns the matching link', function() {
@@ -265,6 +265,25 @@ asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
     function(err) {
       console.log(err);
       equal(false, true);
+      start();
+    });
+});
+
+asyncTest('halfDoc.get() triggers onError on unknown rel', function() {
+
+  var d0 = Half.go('http://localhost:4567')
+
+  d0.get(
+    'nada',
+    function(doc) {
+      equal(false, true);
+      start();
+    },
+    function(err) {
+      equal(err.status, "error");
+      equal(err.text, "unknown rel 'nada'");
+      equal(err.jqxhr, undefined);
+      deepEqual(err.data, { error: "unknown rel 'nada'" });
       start();
     });
 });
