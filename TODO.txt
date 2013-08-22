@@ -1,9 +1,10 @@
 
 [o] allow for post without params (args.pop instead of args.shift)
 [o] Half.go('/api') (absolute URI is an exception...)
+[x] provide a default, logging onError
+    (what about IE? Well, if no console, then no logging... (and no error))
 
 [ ] implement the curie thinggy
 
-[ ] provide a default, logging onError
-    (what about IE? Well, if no console, then no logging... (and no error))
+[ ] in case of form validation issue, use onError (do not raise immediately...)
 
