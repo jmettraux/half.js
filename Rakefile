@@ -9,8 +9,11 @@ LIBRARY =
 LICENSE_URI =
   "http://github.com/jmettraux/#{LIBRARY}/LICENSE.txt"
 
-CLOSURE_COMPILER_OPTIONS =
-  '--warning_level DEFAULT'
+CLOSURE_COMPILER_OPTIONS = %w[
+  --warning_level DEFAULT
+  --language_in ECMASCRIPT5
+].join(' ')
+
 
 
 #
