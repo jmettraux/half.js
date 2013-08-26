@@ -24,6 +24,7 @@ before do
   headers['Content-Type'] ='application/json'
   headers['Access-Control-Allow-Origin'] = '*'
   headers['Access-Control-Allow-Headers'] = 'origin, content-type'
+  headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
 end
 
 
@@ -42,6 +43,10 @@ get '/' do
         doc: {
           href: "#{U}/doc/{id}",
           templated: true },
+        doc_remove: {
+          href: "#{U}/doc/{id}",
+          templated: true,
+          method: 'DELETE' },
         docs:{
           href: "#{U}/docs", method: 'POST' },
         orders: {
@@ -112,6 +117,18 @@ post '/docs' do
     "\"error message\":\"#{e}\"," +
     "\"trace\":\"#{e.backtrace.first}\"," +
     "}\n"
+  end
+end
+
+options '/doc/:id' do; end
+
+delete '/doc/:id' do
+
+  if d = $docs.delete(params[:id])
+    Rufus::Json.pretty_encode(d) + "\n"
+  else
+    status 404
+    "{\"message\":\"not found\"}\n"
   end
 end
 

@@ -5,5 +5,8 @@
     (what about IE? Well, if no console, then no logging... (and no error))
 [o] in case of form validation issue, use onError (do not raise immediately...)
 
+[ ] ?_method=DELETE ?
+    that'd mean DELETE turned into a POST with that uri suffix ?
+
 [ ] implement the curie thinggy
 

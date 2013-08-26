@@ -113,6 +113,14 @@ var Half = (function() {
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
+  halfDoc.delete = function(rel, params, onSuccess, onError) {
+
+    var a = extractArgs('DELETE', arguments);
+
+    request(
+      this.link(a.rel, a.params), 'DELETE', null, a.onSuccess, a.onError);
+  };
+
   halfDoc.embeds = function(embeddedKey) {
 
     var v = (this._embedded || {})[embeddedKey];

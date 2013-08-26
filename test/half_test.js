@@ -189,12 +189,11 @@ test('halfDoc.link(rel, values) returns the expanded link (query)', function() {
 
 asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
 
-  var d0 =
-    Half.wrap({ _links: { doc: { href: 'http://localhost:4567/doc' } } });
+  var d = Half.wrap({ _links: { doc: { href: 'http://localhost:4567/doc' } } });
 
   //console.log(JSON.stringify(d0));
 
-  d0.get(
+  d.get(
     'doc',
     null,
     function(data) {
@@ -214,9 +213,9 @@ asyncTest('halfDoc.get(rel, params, os, oe) GETs a new doc', function() {
 
 asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'doc',
     { id: 'dublin0' },
     function(doc) {
@@ -232,9 +231,9 @@ asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
 
 asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'search',
     { query: 'rocky road' },
     function(doc) {
@@ -251,9 +250,9 @@ asyncTest('halfDoc.get(rel, params, os, oe) expands links', function() {
 
 asyncTest('halfDoc.get() triggers onError on unknown rel', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'nada',
     function(doc) {
       equal(false, true);
@@ -270,9 +269,9 @@ asyncTest('halfDoc.get() triggers onError on unknown rel', function() {
 
 asyncTest('halfDoc.get() triggers onError on unexpanded {stuff}', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'doc',
     function(doc) {
       equal(false, true);
@@ -302,9 +301,9 @@ asyncTest('halfDoc.get() triggers onError on unexpanded {stuff}', function() {
 
 asyncTest('halfDoc.post(rel, params, data, os, oe) POSTs', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.post(
+  d.post(
     'docs',
     null,
     { id: 'dublin1', name: 'nada' },
@@ -322,9 +321,9 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) POSTs', function() {
 
 asyncTest('halfDoc.post(rel, data, os, oe) POSTs', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.post(
+  d.post(
     'docs',
     { id: 'dublin2', name: 'rien du tout' },
     function(doc) {
@@ -343,9 +342,9 @@ asyncTest('halfDoc.post(rel, data, os, oe) POSTs', function() {
 
 test('halfDoc.post(rel, params, data, os, oe) triggers onError on missing fields', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.post(
+  d.post(
     'orders',
     {},
     function(doc) {
@@ -363,9 +362,9 @@ test('halfDoc.post(rel, params, data, os, oe) triggers onError on missing fields
 
 asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.post(
+  d.post(
     'orders',
     null,
     { name: 'alf', age: 30 },
@@ -384,14 +383,49 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() 
     });
 });
 
+
+//
+// halfDoc.delete(rel, params, onSuccess, onError)
+
+asyncTest(
+  'halfDoc.delete(rel, params, data, os, oe) enforces fields',
+  function() {
+
+    var d = Half.go('http://localhost:4567');
+
+    d.post(
+      'docs',
+      { id: 'dublin99', name: 'mfd' },
+      function(doc) {
+
+        d.delete(
+          'doc_remove',
+          { id: 'dublin99' },
+          function(doc) {
+            equal(JSON.stringify(doc), '{"id":"dublin99","name":"mfd"}');
+            start();
+          },
+          function(err) {
+            console.log(err);
+            equal(false, true);
+            start();
+          });
+
+      },
+      function(err) {
+        console.log(err);
+        start();
+      });
+  });
+
 //
 // errors
 
 asyncTest('halfDoc.get(...) onError (plain text)', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'err0',
     function(doc) {
       equal(false, true);
@@ -410,9 +444,9 @@ asyncTest('halfDoc.get(...) onError (plain text)', function() {
 
 asyncTest('halfDoc.get(...) onError (json)', function() {
 
-  var d0 = Half.go('http://localhost:4567')
+  var d = Half.go('http://localhost:4567');
 
-  d0.get(
+  d.get(
     'err1',
     function(doc) {
       equal(false, true);
@@ -449,7 +483,7 @@ test('halfDoc.embeds(embKey) returns undefined if there is no corresponding _emb
 
 test('halfDoc.embeds(embKey) returns the embedded half doc', function() {
 
-  var d = Half.go('http://localhost:4567/orders')
+  var d = Half.go('http://localhost:4567/orders');
 
   var es = d.embeds('orders');
 

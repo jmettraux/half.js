@@ -259,7 +259,19 @@ TO IMPLEMENT
 
 ### halfDoc.delete
 
-TO IMPLEMENT
+Uses the HTTP "DELETE" method against a resources.
+
+```javascript
+d.delete(
+  '#doc-remove',
+  { id: 'doc1234' },
+  function(doc) {
+    console.log([ 'success', doc ]);
+  },
+  function(err) {
+    console.log([ 'failure', err ]);
+  });
+```
 
 ### halfDoc.options
 
