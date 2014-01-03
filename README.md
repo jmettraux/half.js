@@ -257,12 +257,12 @@ If a required field is missing, the onError callback will immediately get trigge
 
 TO IMPLEMENT
 
-### halfDoc.delete
+### halfDoc.del
 
 Uses the HTTP "DELETE" method against a resources.
 
 ```javascript
-d.delete(
+d.del(
   '#doc-remove',
   { id: 'doc1234' },
   function(doc) {
@@ -272,6 +272,8 @@ d.delete(
     console.log([ 'failure', err ]);
   });
 ```
+
+(Note: ```delete``` being strongly disencouraged for identifiers, I settled on ```del```, that, at least, makes the minifier in VS2012 happy...)
 
 ### halfDoc.options
 

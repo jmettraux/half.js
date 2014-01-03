@@ -385,10 +385,10 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() 
 
 
 //
-// halfDoc.delete(rel, params, onSuccess, onError)
+// halfDoc.del(rel, params, onSuccess, onError)
 
 asyncTest(
-  'halfDoc.delete(rel, params, data, os, oe) enforces fields',
+  'halfDoc.del(rel, params, data, os, oe) enforces fields',
   function() {
 
     var d = Half.go('http://localhost:4567');
@@ -398,7 +398,7 @@ asyncTest(
       { id: 'dublin99', name: 'mfd' },
       function(doc) {
 
-        d.delete(
+        d.del(
           'doc_remove',
           { id: 'dublin99' },
           function(doc) {
