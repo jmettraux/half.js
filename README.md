@@ -328,7 +328,7 @@ cd test/server && bundle install
 
 To run the test server:
 ```
-cd test/server && bundle exec ruby server.rb
+rake s
 ```
 
 Then point your browser to test/test.html

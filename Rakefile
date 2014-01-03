@@ -99,12 +99,20 @@ desc %q{
 }
 task :p => :package
 
+#desc %q{
+#  serve the current dir over HTTP for testing
+#}
+#task :serve do
+#
+#  sh 'python -m SimpleHTTPServer 1234'
+#end
+
 desc %q{
-  serve the current dir over HTTP for testing
+  starts the test JSON over HTTP server
 }
 task :serve do
 
-  sh 'python -m SimpleHTTPServer 1234'
+  sh 'cd test/server && bundle exec ruby server.rb'
 end
 
 desc %q{
