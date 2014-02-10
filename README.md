@@ -255,7 +255,19 @@ If a required field is missing, the onError callback will immediately get trigge
 
 ### halfDoc.put
 
-TO IMPLEMENT
+Like halfDoc.post but with the HTTP "PUT" method.
+
+```javascript
+d.put(
+  '#doc-update',
+  updatedDoc,
+  function(doc) {
+    console.log([ 'success', doc ]);
+  },
+  function(err) {
+    console.log([ 'failure', err ]);
+  });
+```
 
 ### halfDoc.del
 
