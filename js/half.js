@@ -113,6 +113,14 @@ var Half = (function() {
       this.link(a.rel, a.params), 'POST', a.data, a.onSuccess, a.onError);
   };
 
+  halfDoc.put = function(elt, params, data, onSuccess, onError) {
+
+    var a = extractArgs('PUT', arguments);
+
+    request(
+      this.link(a.rel, a.params), 'PUT', a.data, a.onSuccess, a.onError);
+  };
+
   halfDoc.del = function(rel, params, onSuccess, onError) {
 
     var a = extractArgs('DELETE', arguments);
@@ -220,12 +228,15 @@ var Half = (function() {
       if (mismatch) throw new Error("args mismatch (at '" + as[i] + "')");
     }
 
-    if (meth === 'POST' && o.params && ! o.data) {
+    if ((meth === 'POST' || meth === 'PUT') && o.params && ! o.data) {
       o.data = o.params;
       o.params = null;
     }
     if (meth === 'POST' && ! o.data) {
       throw new Error("missing POST data arg");
+    }
+    if (meth === 'PUT' && ! o.data) {
+      throw new Error("missing PUT data arg");
     }
 
     return o;

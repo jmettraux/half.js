@@ -58,6 +58,14 @@ get '/' do
             { name: 'code', default: 'batsu' },
             { name: 'country', value: 'japan' }
           ] },
+        orders_update: {
+          href: "#{U}/orders",
+          method: 'PUT',
+          fields: [
+            { name: 'name', required: true },
+            { name: 'age', required: true },
+            { name: 'code', default: 'batsu' }
+          ] },
         order_list: {
           href: "#{U}/orders" },
         err0: {
@@ -135,6 +143,12 @@ end
 options '/orders' do; end
 
 post '/orders' do
+
+  request.body.read
+    # mirror...
+end
+
+put '/orders' do
 
   request.body.read
     # mirror...

@@ -383,6 +383,31 @@ asyncTest('halfDoc.post(rel, params, data, os, oe) enforces fields', function() 
     });
 });
 
+//
+// halfDoc.post(rel, params, data, onSuccess, onError)
+
+asyncTest('halfDoc.put(rel, params, data, os, oe) puts', function() {
+
+  var d = Half.go('http://localhost:4567');
+
+  d.put(
+    'orders_update',
+    null,
+    { name: 'alf', age: 30 },
+    function(doc) {
+      //console.log(doc);
+      equal(doc.name, 'alf');
+      equal(doc.age, 30);
+      equal(doc.code, 'batsu');
+      start();
+    },
+    function(err) {
+      console.log(err);
+      console.log(JSON.stringify(err));
+      equal(false, true);
+      start();
+    });
+});
 
 //
 // halfDoc.del(rel, params, onSuccess, onError)
