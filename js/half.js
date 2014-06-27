@@ -25,7 +25,7 @@
 
 var Half = (function() {
 
-  var VERSION = '0.9.1';
+  var VERSION = '0.9.2';
 
   var self = this;
 
