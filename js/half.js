@@ -313,6 +313,8 @@ var Half = (function() {
       params.data = JSON.stringify(data);
     }
 
+    if (meth !== 'GET' && meth != 'HEAD') params.cache = false;
+
     $.ajax(params);
   };
 
